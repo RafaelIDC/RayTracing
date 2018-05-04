@@ -109,6 +109,7 @@ public class Plain extends Shape {
 	@Override
 	public Hit intersect(Ray ray) {
 		//TODO: implement this method.
-		throw new UnimplementedMethodException("intersect(Ray)");
+		return null;
+		//throw new UnimplementedMethodException("intersect(Ray)");
 	}
 }

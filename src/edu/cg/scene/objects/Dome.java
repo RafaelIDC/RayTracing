@@ -27,7 +27,9 @@ public class Dome extends Shape {
 		//TODO: implement this method.
 		
 		//We draw the part of the sphere which is above the surface (N > 0)
-		
-		throw new UnimplementedMethodException("intersect(Ray)");
+
+		return null;
+
+		//throw new UnimplementedMethodException("intersect(Ray)");
 	}
 }

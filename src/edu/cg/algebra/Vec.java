@@ -10,6 +10,24 @@ public class Vec {
 		this.y = y;
 		this.z = z;
 	}
+
+	/**
+	 * Creates a vector from p1-p0.
+	 * @param p0
+	 * @param p1
+	 */
+	public Vec(Point p0, Point p1){
+		this.x = p1.x - p0.x;
+		this.y = p1.y-p0.y;
+		this.z = p1.z - p0.z;
+	}
+
+	public Vec(Color color)
+	{
+		this.x = color.getRed();
+		this.y = color.getGreen();
+		this.z = color.getBlue();
+	}
 	
 	public Vec(double val) {
 		this(val, val, val);

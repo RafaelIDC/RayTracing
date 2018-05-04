@@ -14,7 +14,7 @@ import edu.cg.scene.objects.Sphere;
 import edu.cg.scene.objects.Surface;
 
 public class Scenes {
-	
+
 	public static Scene scene1() {
 		Shape plainShape = new Plain(0, -0.5, -1, -3.5);
 		Material plainMat = new Material()
@@ -312,5 +312,29 @@ public class Scenes {
 				.initRenderRefarctions(true)
 				.initRenderReflections(true)
 				.initMaxRecursionLevel(6);
+	}
+
+	public static Scene scene10()
+	{
+		Shape sphere = new Sphere();
+		Material sphereMat = new Material()
+				.initKa(new Vec(1))
+				.initKd1(new Vec(1, 0, 0))
+				.initKs(new Vec(0.7))
+				.initReflectionIntensity(0.95)
+				.initShininess(10);
+		Surface surface = new Surface(sphere, sphereMat);
+
+		Light dirLight = new DirectionalLight()
+				.initDirection(new Vec(0, 0.5, -1))
+				.initIntensity(new Vec(0.7, 0.5, 0));
+
+		return new Scene()
+				.initAmbient(new Vec(0.1, 0.2, 0.3))
+				.initCamera(new Point(0, 0, 4))
+				.addLightSource(dirLight)
+				.addSurface(surface)
+				.initName("oneSphere")
+				.initAntiAliasingFactor(1);
 	}
 }

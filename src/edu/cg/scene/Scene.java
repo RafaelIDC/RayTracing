@@ -21,7 +21,7 @@ public class Scene {
 	private String name = "scene";
 	private int maxRecursionLevel = 1;
 	private int antiAliasingFactor = 1; //gets the values of 1, 2 and 3
-	private boolean renderRefarctions = false;
+	private boolean renderRefractions = false;
 	private boolean renderReflections = false;
 	
 	private Point camera = new Point(0, 0, 5);
@@ -73,7 +73,7 @@ public class Scene {
 	}
 	
 	public Scene initRenderRefarctions(boolean renderRefarctions) {
-		this.renderRefarctions = renderRefarctions;
+		this.renderRefractions = renderRefarctions;
 		return this;
 	}
 	
@@ -95,8 +95,8 @@ public class Scene {
 		return maxRecursionLevel;
 	}
 	
-	public boolean getRenderRefarctions() {
-		return renderRefarctions;
+	public boolean getRenderRefractions() {
+		return renderRefractions;
 	}
 	
 	public boolean getRenderReflections() {
@@ -133,7 +133,7 @@ public class Scene {
 		}
 	}
 	
-	private transient IndexTransformer transformaer = null;
+	private transient IndexTransformer transformer = null;
 	private transient ExecutorService executor = null;
 	private transient Logger logger = null;
 	
@@ -149,10 +149,10 @@ public class Scene {
 		initSomeFields(imgWidth, imgHeight, logger);
 		
 		BufferedImage img = new BufferedImage(imgWidth, imgHeight, BufferedImage.TYPE_INT_RGB);
-		transformaer = new IndexTransformer(imgWidth, imgHeight);
+		transformer = new IndexTransformer(imgWidth, imgHeight);
 		int nThreads = Runtime.getRuntime().availableProcessors();
 		nThreads = nThreads < 2 ? 2 : nThreads;
-		this.logger.log("Intitialize executor. Using " + nThreads + " threads to render " + name);
+		this.logger.log("Initialize executor. Using " + nThreads + " threads to render " + name);
 		executor = Executors.newFixedThreadPool(nThreads);
 		
 		@SuppressWarnings("unchecked")
@@ -167,7 +167,7 @@ public class Scene {
 				futures[y][x] = calcColor(x, y);
 		
 		this.logger.log("Done shooting rays.");
-		this.logger.log("Wating for results...");
+		this.logger.log("Waiting for results...");
 		
 		for(int y = 0; y < imgHeight; ++y)
 			for(int x = 0; x < imgWidth; ++x) {
@@ -180,24 +180,43 @@ public class Scene {
 		this.logger.log("Ray tracing of " + name + " has been completed.");
 		
 		executor = null;
-		transformaer = null;
+		transformer = null;
 		this.logger = null;
 		
 		return img;
 	}
-	
+
+	//Shoots a ray from camera to point x,y on screen,
+	//Gets the color in pixel x,y
 	private Future<Color> calcColor(int x, int y) {
 		return executor.submit(() -> {
 			//TODO: change this method implementation to implement super sampling
-			Point pointOnScreenPlain = transformaer.transform(x, y);
+
+			Point pointOnScreenPlain = transformer.transform(x, y);
 			Ray ray = new Ray(camera, pointOnScreenPlain);
 			return calcColor(ray, 0).toColor();
 		});
 	}
 	
-	//recusionLevel = the number of recursions already performed (how deep are we)
-	private Vec calcColor(Ray ray, int recusionLevel) {
-		//TODO: implement this method
-		throw new UnimplementedMethodException("calcColor(Ray, int)");
+	//recursionLevel = the number of recursions already performed (how deep are we)
+	private Vec calcColor(Ray ray, int recursionLevel) {
+
+		Color color = null;
+
+		for (Surface s : surfaces)
+		{
+			color = backgroundColor.toColor();
+			if (s.intersect(ray) != null)
+			{
+				color = new Color(255,255,255);
+			}
+		}
+
+		return new Vec(color);
+
+		//Check intersection of the ray (vector) with every surface in the scene list,
+		//Calculate the color in that point of intersection
+
+		//throw new UnimplementedMethodException("calcColor(Ray, int)");
 	}
 }
