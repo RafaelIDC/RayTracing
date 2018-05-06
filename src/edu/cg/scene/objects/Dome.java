@@ -61,7 +61,7 @@ public class Dome extends Shape {
 			return null;
 
 		//Otherwise, find intersection point
-		Point plainIntersect = ray.add(hitPlain.t());
+		Point plainIntersect = ray.getHittingPoint(hitPlain);
 
 		//Draw the plain if it is within the intersection circle
 		if (Ops.dist(plainIntersect, sphere.getCenter()) <= sphere.getRadius())

@@ -348,7 +348,7 @@ public class Scenes {
 	}
 
 	public static Scene scene11(){
-		Shape domeShape = new Dome(new Point(0,5,-50), 5, 1, new Vec(0,-1,0) );
+		Shape domeShape = new Dome(new Point(0,-5,-50), 5, 1, new Vec(0,-1,0) );
 		Material domeMat = new Material()
 				.initKa(new Vec(0.05))
 				.initKd1(new Vec())
@@ -395,5 +395,30 @@ public class Scenes {
 	}
 
 
+	public static Scene scene13(){
+
+		Point p1 = new Point(1,1,-10);
+		Point p2 = new Point(1, 3, -10);
+		Point p3 = new Point(-1,2,-50);
+
+		Shape triShape = new Triangle(p1, p2, p3);
+
+		Material plainMat = new Material()
+				.initKa(new Vec(0.05))
+				.initKd1(new Vec(1))
+				.initKd2(new Vec())
+				.initKs(new Vec(1))
+				.initReflectionIntensity(0.3)
+				.initIsCheckerBoard(false)
+				.initShininess(20);
+		Surface triSurface = new Surface(triShape, plainMat);
+
+		return new Scene()
+				.initAmbient(new Vec(0.1, 0.2, 0.3))
+				.initCamera(new Point(0, 0, 4))
+				.addSurface(triSurface)
+				.initName("Triangle")
+				.initAntiAliasingFactor(1);
+	}
 
 }

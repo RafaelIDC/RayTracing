@@ -50,7 +50,8 @@ public class Triangle extends Shape {
 		if(plainHit == null)
 			return null;		// no intersection with the plain
 
-		Point intersectPoint = ray.source().add(ray.direction().mult(plainHit.t()));
+		//Point intersectPoint = ray.source().add(ray.direction().mult(plainHit.t()));
+		Point intersectPoint = ray.getHittingPoint(plainHit);
 
 		Vec v1 = this.p1.sub(ray.source());
 		Vec u1 = this.p2.sub(ray.source());
