@@ -11,6 +11,7 @@ import java.util.concurrent.Future;
 
 import edu.cg.Logger;
 import edu.cg.UnimplementedMethodException;
+import edu.cg.algebra.Hit;
 import edu.cg.algebra.Point;
 import edu.cg.algebra.Ray;
 import edu.cg.algebra.Vec;
@@ -199,13 +200,14 @@ public class Scene {
 	}
 	
 	//recursionLevel = the number of recursions already performed (how deep are we)
+
 	private Vec calcColor(Ray ray, int recursionLevel) {
 
 		Color color = null;
+		color = backgroundColor.toColor();
 
 		for (Surface s : surfaces)
 		{
-			color = backgroundColor.toColor();
 			if (s.intersect(ray) != null)
 			{
 				color = new Color(255,255,255);

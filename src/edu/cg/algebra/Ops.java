@@ -28,11 +28,6 @@ public class Ops {
 		return mult(new Point(a), p);
 	}
 
-	public static Point tMult(double t, Vec v)
-	{
-		return new Point(t*v.x, t*v.y, t*v.x);
-	}
-	
 	public static Point mult(Point p1, Point p2) {
 		return new Point(p1.x*p2.x, p1.y*p2.y, p1.z*p2.z);
 	}

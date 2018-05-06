@@ -33,11 +33,16 @@ public class Sphere extends Shape {
 		this.radius = radius;
 		return this;
 	}
-	
-	@Override
-	public Hit intersect(Ray ray) {
 
-		double[] tValues;
+	public Point getCenter(){
+		return this.center;
+	}
+
+	public double getRadius(){
+		return this.radius;
+	}
+
+	public double[] rayValues(Ray ray){
 
 		Vec RaySourceToSphereCenter = new Vec(this.center, ray.source());
 
@@ -45,7 +50,13 @@ public class Sphere extends Shape {
 		double b = 2 * (ray.direction().dot(RaySourceToSphereCenter));
 		double c = Ops.normSqr(RaySourceToSphereCenter) - Math.pow(this.radius,2);
 
-		tValues = Ops.calcSquareRoots(a,b,c);
+		return Ops.calcSquareRoots(a,b,c);
+	}
+	
+	@Override
+	public Hit intersect(Ray ray) {
+
+		double[] tValues = rayValues(ray);
 
 		if (tValues == null)
 			return null;
@@ -55,7 +66,7 @@ public class Sphere extends Shape {
 		if (Double.isNaN(t))
 			return null;
 
-		Vec normal = new Vec(this.center, Ops.tMult(t, ray.direction()));
+		Vec normal = new Vec(this.center, ray.add(t));
 
 		return new Hit(t, normal);
 

@@ -6,12 +6,7 @@ import edu.cg.scene.Scene;
 import edu.cg.scene.lightSources.DirectionalLight;
 import edu.cg.scene.lightSources.Light;
 import edu.cg.scene.lightSources.Spotlight;
-import edu.cg.scene.objects.Dome;
-import edu.cg.scene.objects.Material;
-import edu.cg.scene.objects.Plain;
-import edu.cg.scene.objects.Shape;
-import edu.cg.scene.objects.Sphere;
-import edu.cg.scene.objects.Surface;
+import edu.cg.scene.objects.*;
 
 public class Scenes {
 
@@ -316,14 +311,27 @@ public class Scenes {
 
 	public static Scene scene10()
 	{
-		Shape sphere = new Sphere();
+		Shape sphere = new Sphere()
+				.initCenter(new Point(2,-1,-10))
+				.initRadius(1.2);
 		Material sphereMat = new Material()
 				.initKa(new Vec(1))
 				.initKd1(new Vec(1, 0, 0))
 				.initKs(new Vec(0.7))
 				.initReflectionIntensity(0.95)
 				.initShininess(10);
-		Surface surface = new Surface(sphere, sphereMat);
+		Surface sphereSurface = new Surface(sphere, sphereMat);
+
+		Shape sphere2 = new Sphere()
+				.initCenter(new Point(1, 0, -20))
+				.initRadius(2);
+		Material sphere2Mat = new Material()
+				.initKa(new Vec(1))
+				.initKd1(new Vec(1, 0, 0))
+				.initKs(new Vec(0.7))
+				.initReflectionIntensity(0.95)
+				.initShininess(10);
+		Surface sphere2Surface = new Surface(sphere2, sphere2Mat);
 
 		Light dirLight = new DirectionalLight()
 				.initDirection(new Vec(0, 0.5, -1))
@@ -333,8 +341,59 @@ public class Scenes {
 				.initAmbient(new Vec(0.1, 0.2, 0.3))
 				.initCamera(new Point(0, 0, 4))
 				.addLightSource(dirLight)
-				.addSurface(surface)
+				.addSurface(sphereSurface)
+				.addSurface(sphere2Surface)
 				.initName("oneSphere")
 				.initAntiAliasingFactor(1);
 	}
+
+	public static Scene scene11(){
+		Shape domeShape = new Dome(new Point(0,5,-50), 5, 1, new Vec(0,-1,0) );
+		Material domeMat = new Material()
+				.initKa(new Vec(0.05))
+				.initKd1(new Vec())
+				.initKs(new Vec(1))
+				.initReflectionIntensity(0.005)
+				.initRefractionIndex(1.5)
+				.initRefractionIntensity(0.945)
+				.initKt(new Vec(1, 0.3, 0.3))
+				.initIsTransparent(true)
+				.initShininess(100);
+		Surface domeSurface = new Surface(domeShape, domeMat);
+
+		Light dirLight = new DirectionalLight()
+				.initDirection(new Vec(-1));
+
+		return new Scene()
+				.initAmbient(new Vec(0.1, 0.2, 0.3))
+				.initCamera(new Point(0, 0, 4))
+				.addSurface(domeSurface)
+				.addLightSource(dirLight)
+				.initName("Dome!")
+				.initAntiAliasingFactor(1);
+	}
+
+	public static Scene scene12(){
+
+		Shape plainShape = new Plain();
+		Material plainMat = new Material()
+				.initKa(new Vec(0.05))
+				.initKd1(new Vec(1))
+				.initKd2(new Vec())
+				.initKs(new Vec(1))
+				.initReflectionIntensity(0.3)
+				.initIsCheckerBoard(false)
+				.initShininess(20);
+		Surface plainSurface = new Surface(plainShape, plainMat);
+
+		return new Scene()
+				.initAmbient(new Vec(0.1, 0.2, 0.3))
+				.initCamera(new Point(0, 0, 4))
+				.addSurface(plainSurface)
+				.initName("OnePlain")
+				.initAntiAliasingFactor(1);
+	}
+
+
+
 }

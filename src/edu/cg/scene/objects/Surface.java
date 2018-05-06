@@ -31,7 +31,7 @@ public class Surface implements Intersectable {
 	public Hit intersect(Ray ray) {
 
 		return shape.intersect(ray);
-		
+
 		//throw new UnimplementedMethodException("intersect(Ray)");
 	}
 	
