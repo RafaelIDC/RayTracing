@@ -201,7 +201,7 @@ public class Scenes {
 
 		return new Scene()
 				.initName("scene5")
-				.initMaxRecursionLevel(6)
+				.initMaxRecursionLevel(10)
 				.initAntiAliasingFactor(3)
 				.initRenderReflections(true)
 				.addLightSource(dirLight)
@@ -312,57 +312,89 @@ public class Scenes {
 	public static Scene scene10()
 	{
 		Shape sphere = new Sphere()
-				.initCenter(new Point(2,-1,-10))
-				.initRadius(1.2);
+				.initCenter(new Point(1,1,-6))
+				.initRadius(1.3);
 		Material sphereMat = new Material()
-				.initKa(new Vec(1))
-				.initKd1(new Vec(1, 0, 0))
-				.initKs(new Vec(0.7))
+				.initKa(new Vec(0.05))
+				.initKd1(new Vec(0.5,0,0))
+				.initKs(new Vec(1))
 				.initReflectionIntensity(0.95)
-				.initShininess(10);
+				.initShininess(100);
 		Surface sphereSurface = new Surface(sphere, sphereMat);
 
 		Shape sphere2 = new Sphere()
-				.initCenter(new Point(1, 0, -20))
-				.initRadius(2);
+				.initCenter(new Point(-1, 0.05, -5))
+				.initRadius(0.8);
 		Material sphere2Mat = new Material()
-				.initKa(new Vec(1))
+				.initKa(new Vec(0.2))
 				.initKd1(new Vec(1, 0, 0))
-				.initKs(new Vec(0.7))
-				.initReflectionIntensity(0.95)
-				.initShininess(10);
+				.initKs(new Vec(0.5))
+				.initReflectionIntensity(0.05)
+				.initShininess(20);
 		Surface sphere2Surface = new Surface(sphere2, sphere2Mat);
 
-		Light dirLight = new DirectionalLight()
-				.initDirection(new Vec(0, 0.5, -1))
-				.initIntensity(new Vec(0.7, 0.5, 0));
+		Shape plainShape = new Plain();
+		Material plainMat = new Material()
+				.initKa(new Vec(0.05))
+				.initKd1(new Vec(1))
+				.initKd2(new Vec())
+				.initKs(new Vec(1))
+				.initReflectionIntensity(0.01)
+				.initIsCheckerBoard(true)
+				.initShininess(100);
+		Surface plainSurface = new Surface(plainShape, plainMat);
+
+		Shape plainShape2 = new Plain(new Vec(3,0,1), new Point(-3,0,-20));
+		Material plainMat2 = new Material()
+				.initKa(new Vec(0.05))
+				.initKd1(new Vec(1))
+				.initKd2(new Vec())
+				.initKs(new Vec(1))
+				.initReflectionIntensity(0.01)
+				.initIsCheckerBoard(true)
+				.initShininess(100);
+		Surface plainSurface2 = new Surface(plainShape2, plainMat2);
+
+//		Light dirLight = new DirectionalLight()
+//				.initDirection(new Vec(1, 0.5, 2))
+//				.initIntensity(new Vec(1, 1, 1));
+
+		Light dirLight = new DirectionalLight();
+
+//		Light dirLight2 = new DirectionalLight()
+//				.initDirection(new Vec(0, -2, -2))
+//				.initIntensity(new Vec(0.1, 0.1, 0.1));
 
 		return new Scene()
 				.initAmbient(new Vec(0.1, 0.2, 0.3))
 				.initCamera(new Point(0, 0, 4))
 				.addLightSource(dirLight)
+//				.addLightSource(dirLight2)
 				.addSurface(sphereSurface)
 				.addSurface(sphere2Surface)
-				.initName("oneSphere")
-				.initAntiAliasingFactor(1);
+				.addSurface(plainSurface)
+				.addSurface(plainSurface2)
+				.initName("KissingSpheres")
+				.initAntiAliasingFactor(1)
+				.initMaxRecursionLevel(8)
+				.initRenderReflections(true);
 	}
 
 	public static Scene scene11(){
-		Shape domeShape = new Dome(new Point(0,-5,-50), 5, 1, new Vec(0,-1,0) );
+		Shape domeShape = new Dome(new Point(0,-5,-5), 5, 1, new Vec(0,-1,0) );
 		Material domeMat = new Material()
 				.initKa(new Vec(0.05))
-				.initKd1(new Vec())
+				.initKd1(new Vec(1,0,1))
 				.initKs(new Vec(1))
-				.initReflectionIntensity(0.005)
+				.initReflectionIntensity(1)
 				.initRefractionIndex(1.5)
 				.initRefractionIntensity(0.945)
 				.initKt(new Vec(1, 0.3, 0.3))
-				.initIsTransparent(true)
+				//.initIsTransparent(true)
 				.initShininess(100);
 		Surface domeSurface = new Surface(domeShape, domeMat);
 
-		Light dirLight = new DirectionalLight()
-				.initDirection(new Vec(-1));
+		Light dirLight = new DirectionalLight();
 
 		return new Scene()
 				.initAmbient(new Vec(0.1, 0.2, 0.3))
@@ -370,6 +402,8 @@ public class Scenes {
 				.addSurface(domeSurface)
 				.addLightSource(dirLight)
 				.initName("Dome!")
+				.initRenderReflections(true)
+				.initMaxRecursionLevel(5)
 				.initAntiAliasingFactor(1);
 	}
 

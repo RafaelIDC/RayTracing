@@ -1,6 +1,7 @@
 package edu.cg.scene.lightSources;
 
 import edu.cg.algebra.Point;
+import edu.cg.algebra.Ray;
 import edu.cg.algebra.Vec;
 
 public class Spotlight extends PointLight {
@@ -40,6 +41,18 @@ public class Spotlight extends PointLight {
 	public Spotlight initDecayFactors(double q, double l, double c) {
 		return (Spotlight)super.initDecayFactors(q, l, c);
 	}
-	
-	//TODO: add some methods
+
+	public Vec getIntensity(Point hitPoint){
+		double distance = hitPoint.dist(position);
+		double calc = kc + (kl * distance) + (kq * Math.pow(2, distance));
+		Vec direcToLight = hitPoint.sub(position);
+		double dotCalc = direction.dot(direcToLight);
+
+		return (intensity.mult(dotCalc)).mult(1 / calc);
+	}
+
+	public Vec getDirection(Point hitPoint)
+	{
+		return direction;
+	}
 }

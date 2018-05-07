@@ -11,11 +11,9 @@ import java.util.concurrent.Future;
 
 import edu.cg.Logger;
 import edu.cg.UnimplementedMethodException;
-import edu.cg.algebra.Hit;
-import edu.cg.algebra.Point;
-import edu.cg.algebra.Ray;
-import edu.cg.algebra.Vec;
+import edu.cg.algebra.*;
 import edu.cg.scene.lightSources.Light;
+import edu.cg.scene.lightSources.PointLight;
 import edu.cg.scene.objects.Surface;
 
 public class Scene {
@@ -203,18 +201,75 @@ public class Scene {
 
 	private Vec calcColor(Ray ray, int recursionLevel) {
 
-		Color color = null;
-		color = backgroundColor.toColor();
+		double t_min = Double.MAX_VALUE;
+		Surface hitSurface = null;
+		Hit hit = null;
+		Hit hitTemp = null;
 
+		//Find the closest surface for this ray
 		for (Surface s : surfaces)
 		{
-			if (s.intersect(ray) != null)
+			hitTemp = s.intersect(ray);
+			if (hitTemp != null && hitTemp.t() < t_min)
 			{
-				color = new Color(255,255,255);
+				t_min = hitTemp.t();
+				hit = hitTemp;
+				hit.setSurface(s);
 			}
 		}
 
-		return new Vec(color);
+		//No surfaces found: paint background
+		if (hit == null)
+			return new Vec(backgroundColor);
+
+		hitSurface = hit.getSurface();
+		Vec	diffuse = new Vec(0,0,0);
+		Vec	specular = new Vec(0,0,0);
+		Point hitPoint = ray.getHittingPoint(hit);
+
+		for (Light L : lightSources) {
+			boolean shadow = false;
+			Ray shadowRay = new Ray(hitPoint, L.getDirection(hitPoint).neg());
+			for (Surface s : surfaces)
+				if (s != hitSurface && s.intersect(shadowRay) != null)
+				{
+					shadow = true;
+					break;
+				}
+
+			if (shadow)
+				continue;
+
+			Vec intensity = L.getIntensity(hitPoint);
+
+			//Add diffuse
+			double NL = Math.abs(hit.getNormalToSurface().dot(L.getDirection(hitPoint)));
+			double dR = hitSurface.Kd(hitPoint).x * NL * intensity.x;
+			double dG = hitSurface.Kd(hitPoint).y * NL * intensity.y;
+			double dB = hitSurface.Kd(hitPoint).z * NL * intensity.z;
+			diffuse = diffuse.add(new Vec(dR,dG,dB));
+
+			//Add specular
+			double VR = ray.direction().dot(Ops.reflect(L.getDirection(hitPoint),hit.getNormalToSurface()));
+			VR = Math.pow(VR, hitSurface.shininess());
+			double sR = hitSurface.Ks().x * VR * intensity.x;
+			double sG = hitSurface.Ks().y * VR * intensity.y;
+			double sB = hitSurface.Ks().z * VR * intensity.z;
+			specular = specular.add(new Vec(sR, sG, sB));
+		}
+
+		Vec res = ambient.mult(hitSurface.Ka())
+				.add(diffuse)
+				.add(specular);
+
+		recursionLevel++;
+		if (recursionLevel == getMaxRecursionLevel())
+			return res;
+
+		Vec reflectionDir = new Vec(Ops.reflect(ray.direction(),hit.getNormalToSurface()));
+		Ray reflection = new Ray(hitPoint, reflectionDir);
+		reflection = new Ray(reflection.add(Ops.epsilon), reflectionDir);
+		return res.add(calcColor(reflection, recursionLevel).mult(hitSurface.reflectionIntensity()));
 
 		//Check intersection of the ray (vector) with every surface in the scene list,
 		//Calculate the color in that point of intersection
@@ -222,3 +277,19 @@ public class Scene {
 		//throw new UnimplementedMethodException("calcColor(Ray, int)");
 	}
 }
+
+
+
+
+
+
+
+
+//		for (Surface s : surfaces)
+//		{
+//			if (s.intersect(ray) != null)
+//			{
+/* TODO: Find closest shape */
+//				color = new Color(255,255,255);
+//			}
+//		}

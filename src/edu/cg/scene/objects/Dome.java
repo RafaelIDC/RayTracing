@@ -52,9 +52,7 @@ public class Dome extends Shape {
 		}
 
 		//If the intersection is below the plain
-		//plain = new Plain(plain.normal().neg().x, plain.normal().neg().y, plain.normal().neg().z, plain.getD());
 		Hit hitPlain = plain.intersect(ray);
-		//plain = new Plain(plain.normal().neg().x, plain.normal().neg().y, plain.normal().neg().z, plain.getD());
 
 		//If the ray is parallel to the plain, below
 		if (hitPlain == null)
@@ -69,7 +67,5 @@ public class Dome extends Shape {
 
 		//The intersection is out of sphere bounds
 		return null;
-
-		//throw new UnimplementedMethodException("intersect(Ray)");
 	}
 }
