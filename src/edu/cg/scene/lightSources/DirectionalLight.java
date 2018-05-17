@@ -27,9 +27,9 @@ public class DirectionalLight extends Light {
 		return intensity;
 	}
 
-	public Vec getDirection(Point hitPoint)
+	public Vec hitToLight(Point hitPoint)
 	{
-		return direction;
+		return direction.neg().normalize();
 	}
 
 	public Point getPosition(){

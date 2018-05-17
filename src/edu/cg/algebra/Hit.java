@@ -19,7 +19,7 @@ public class Hit implements Comparable<Hit> {
 	}
 
 	public Vec getNormalToSurface() {
-		return normalToSurface;
+		return normalToSurface.normalize();
 	}
 
 	public Surface getSurface() {

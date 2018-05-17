@@ -43,17 +43,24 @@ public class Spotlight extends PointLight {
 	}
 
 	public Vec getIntensity(Point hitPoint){
-		double distance = hitPoint.dist(position);
-		double calc = kc + (kl * distance) + (kq * Math.pow(2, distance));
-		Vec direcToLight = hitPoint.sub(position);
-		double dotCalc = direction.dot(direcToLight);
+
+		Vec dirToPoint = new Vec(position, hitPoint).normalize();
+		Vec D = direction.normalize();
+		double angleToPoint = D.dot(dirToPoint);
+
+		if (angleToPoint < angle)
+			return new Vec(0);
+
+		double d = hitPoint.dist(position);
+		double calc = kc + (kl * d) + (kq * Math.pow(d, 2));
+		double dotCalc = D.dot(dirToPoint);
 
 		return (intensity.mult(dotCalc)).mult(1 / calc);
 	}
 
-	public Vec getDirection(Point hitPoint)
+	public Vec hitToLight(Point hitPoint)
 	{
-		return direction;
+		return direction.neg().normalize();
 	}
 
 	public Point getPosition(){

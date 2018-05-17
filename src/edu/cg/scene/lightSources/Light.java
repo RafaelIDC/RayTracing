@@ -17,7 +17,7 @@ public abstract class Light {
 		return this;
 	}
 
-	public abstract Vec getDirection(Point hitPoint);
+	public abstract Vec hitToLight(Point hitPoint);
 
 	public abstract Vec getIntensity(Point hitPoint);
 

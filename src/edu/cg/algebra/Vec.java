@@ -16,10 +16,10 @@ public class Vec {
 	 * @param p0
 	 * @param p1
 	 */
-	public Vec(Point p0, Point p1){
-		this.x = p1.x - p0.x;
-		this.y = p1.y-p0.y;
-		this.z = p1.z - p0.z;
+	public Vec(Point start, Point end){
+		this.x = end.x - start.x;
+		this.y = end.y - start.y;
+		this.z = end.z - start.z;
 	}
 
 	public Vec(Color color)

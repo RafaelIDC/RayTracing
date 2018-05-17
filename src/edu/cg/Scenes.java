@@ -5,6 +5,7 @@ import edu.cg.algebra.Vec;
 import edu.cg.scene.Scene;
 import edu.cg.scene.lightSources.DirectionalLight;
 import edu.cg.scene.lightSources.Light;
+import edu.cg.scene.lightSources.PointLight;
 import edu.cg.scene.lightSources.Spotlight;
 import edu.cg.scene.objects.*;
 
@@ -32,7 +33,7 @@ public class Scenes {
 				.initReflectionIntensity(0.95)
 				.initShininess(10);
 		Surface sphereSurface1 = new Surface(sphereShape1, sphereMat1);
-		
+
 		Shape sphereShape2 = new Sphere()
 				.initCenter(new Point(0.6, -0.5, -1))
 				.initRadius(0.5);
@@ -47,13 +48,13 @@ public class Scenes {
 				.initIsTransparent(true)
 				.initShininess(10);
 		Surface sphereSurface2 = new Surface(sphereShape2, sphereMat2);
-		
+
 		Light spotLight = new Spotlight()
 				.initPosition(new Point(2, 1, 3))
 				.initDirection(new Vec(0.5, 0, -1))
 				.initIntensity(new Vec(0.2, 0.5, 0.7))
 				.initAngle(0.6);
-		
+
 		Light dirLight = new DirectionalLight()
 				.initDirection(new Vec(0, 0.5, -1))
 				.initIntensity(new Vec(0.7, 0.5, 0));
@@ -62,14 +63,14 @@ public class Scenes {
 				.initAmbient(new Vec(0.1, 0.2, 0.3))
 				.initCamera(new Point(0, 0, 4))
 				.addLightSource(dirLight)
-				.addLightSource(spotLight)
+				//.addLightSource(spotLight)
 				.addSurface(plainSurface)
 				.addSurface(sphereSurface1)
 				.addSurface(sphereSurface2)
 				.initName("scene1")
 				.initAntiAliasingFactor(3);
 	}
-	
+
 	public static Scene scene2() {
 		Shape plainShape1 = new Plain(1, 0, -0.1, -3);
 		Material plainMat1 = new Material()
@@ -81,7 +82,7 @@ public class Scenes {
 				.initIsCheckerBoard(true)
 				.initShininess(20);
 		Surface plainSurface1 = new Surface(plainShape1, plainMat1);
-		
+
 		Shape plainShape2 = new Plain(0, 0, -1, -3.5);
 		Material plainMat2 = new Material()
 				.initKa(new Vec(1))
@@ -92,7 +93,7 @@ public class Scenes {
 				.initIsCheckerBoard(true)
 				.initShininess(10);
 		Surface plainSurface2 = new Surface(plainShape2, plainMat2);
-		
+
 		Shape plainShape3 = new Plain(-1, 0, -0.1, -3);
 		Material plainMat3 = new Material()
 				.initKa(new Vec(1))
@@ -114,7 +115,7 @@ public class Scenes {
 				.initIsCheckerBoard(true)
 				.initShininess(10);
 		Surface plainSurface4 = new Surface(plainShape4, plainMat4);
-		
+
 		Shape plainShape5 = new Plain(0, -1, -0.1, -3);
 		Material plainMat5 = new Material()
 				.initKa(new Vec(1))
@@ -125,19 +126,19 @@ public class Scenes {
 				.initIsCheckerBoard(true)
 				.initShininess(15);
 		Surface plainSurface5 = new Surface(plainShape5, plainMat5);
-		
+
 		Light spotlight1 = new Spotlight()
 				.initAngle(0.8)
 				.initIntensity(new Vec(0.3, 0.9, 0.2))
 				.initPosition(new Point())
 				.initDirection(new Vec(0, 0.5, -1));
-		
+
 		Light spotlight2 = new Spotlight()
 				.initAngle(0.9)
 				.initIntensity(new Vec(0.9, 0.5, 0.5))
 				.initPosition(new Point())
 				.initDirection(new Vec(0.5, 0, -1));
-		
+
 		Light spotlight3 = new Spotlight()
 				.initAngle(0.7)
 				.initIntensity(new Vec(0.3, 0.5, 0.9))
@@ -454,5 +455,7 @@ public class Scenes {
 				.initName("Triangle")
 				.initAntiAliasingFactor(1);
 	}
+
+
 
 }

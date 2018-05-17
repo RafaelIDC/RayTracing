@@ -10,10 +10,8 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.Future;
 
 import edu.cg.Logger;
-import edu.cg.UnimplementedMethodException;
 import edu.cg.algebra.*;
 import edu.cg.scene.lightSources.Light;
-import edu.cg.scene.lightSources.PointLight;
 import edu.cg.scene.objects.Surface;
 
 public class Scene {
@@ -222,6 +220,7 @@ public class Scene {
 		if (hit == null)
 			return new Vec(backgroundColor);
 
+		//An intersection was found
 		hitSurface = hit.getSurface();
 		Vec	diffuse = new Vec(0,0,0);
 		Vec	specular = new Vec(0,0,0);
@@ -229,7 +228,8 @@ public class Scene {
 
 		for (Light L : lightSources) {
 			boolean shadow = false;
-			Ray shadowRay = new Ray(hitPoint, L.getDirection(hitPoint).neg());
+			Vec dirToLight = L.hitToLight(hitPoint);
+			Ray shadowRay = new Ray(hitPoint.add(Ops.epsilon, dirToLight), dirToLight);
 			double tToLight = (L.getPosition().x - hitPoint.x) / (shadowRay.direction().x + Double.MIN_VALUE);
 
 			for (Surface s : surfaces) {
@@ -256,19 +256,16 @@ public class Scene {
 			Vec intensity = L.getIntensity(hitPoint);
 
 			//Add diffuse
-			double NL = Math.abs(hit.getNormalToSurface().dot(L.getDirection(hitPoint)));
-			double dR = hitSurface.Kd(hitPoint).x * NL * intensity.x;
-			double dG = hitSurface.Kd(hitPoint).y * NL * intensity.y;
-			double dB = hitSurface.Kd(hitPoint).z * NL * intensity.z;
-			diffuse = diffuse.add(new Vec(dR,dG,dB));
+			double NL = hit.getNormalToSurface().dot(L.hitToLight(hitPoint));
+			NL = (NL < 0 ? 0 : NL);
+			Vec KdNL = hitSurface.Kd(hitPoint).mult(NL);
+			Vec KdNLI = intensity.mult(KdNL);
+			diffuse = diffuse.add(KdNLI);
 
 			//Add specular
-			double VR = ray.direction().dot(Ops.reflect(L.getDirection(hitPoint),hit.getNormalToSurface()));
+			double VR = ray.direction().dot(Ops.reflect(L.hitToLight(hitPoint),hit.getNormalToSurface()));
 			VR = Math.pow(VR, hitSurface.shininess());
-			double sR = hitSurface.Ks().x * VR * intensity.x;
-			double sG = hitSurface.Ks().y * VR * intensity.y;
-			double sB = hitSurface.Ks().z * VR * intensity.z;
-			specular = specular.add(new Vec(sR, sG, sB));
+			specular = specular.add(hitSurface.Ks().mult(VR).mult(intensity));
 		}
 
 		Vec res = ambient.mult(hitSurface.Ka())

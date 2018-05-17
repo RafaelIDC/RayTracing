@@ -42,16 +42,16 @@ public class PointLight extends Light {
 		return this;
 	}
 
-	public Vec getDirection(Point hitPoint)
+	public Vec hitToLight(Point hitPoint)
 	{
-		return new Vec(this.position, hitPoint);
+		return new Vec(hitPoint, position).normalize();
 	}
 
 	public Vec getIntensity(Point hitPoint){
 		double distance = hitPoint.dist(position);
-		double calc = kc + (kl * distance) + (kq * Math.pow(2, distance));
+		double calc = kc + (kl * distance) + (kq * Math.pow(distance, 2));
 
-		return intensity.mult( (1 / calc));
+		return intensity.mult((1 / calc));
 	}
 
 	public Point getPosition(){
