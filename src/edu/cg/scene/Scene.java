@@ -162,7 +162,7 @@ public class Scene {
 		for(int y = 0; y < imgHeight; ++y)
 			for(int x = 0; x < imgWidth; ++x)
 				futures[y][x] = calcColor(x, y);
-		
+
 		this.logger.log("Done shooting rays.");
 		this.logger.log("Waiting for results...");
 		
@@ -191,6 +191,11 @@ public class Scene {
 
 			Point pointOnScreenPlain = transformer.transform(x, y);
 			Ray ray = new Ray(camera, pointOnScreenPlain);
+
+			//WOW DELETE THIS!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+			if (y == 300 && x == 200)
+				logger.log("HEY");
+
 			return calcColor(ray, 0).toColor();
 		});
 	}
@@ -202,12 +207,11 @@ public class Scene {
 		double t_min = Double.MAX_VALUE;
 		Surface hitSurface = null;
 		Hit hit = null;
-		Hit hitTemp = null;
 
 		//Find the closest surface for this ray
 		for (Surface s : surfaces)
 		{
-			hitTemp = s.intersect(ray);
+			Hit hitTemp = s.intersect(ray);
 			if (hitTemp != null && hitTemp.t() < t_min)
 			{
 				t_min = hitTemp.t();
@@ -259,11 +263,13 @@ public class Scene {
 			double NL = hit.getNormalToSurface().dot(L.hitToLight(hitPoint));
 			NL = (NL < 0 ? 0 : NL);
 			Vec KdNL = hitSurface.Kd(hitPoint).mult(NL);
-			Vec KdNLI = intensity.mult(KdNL);
+			Vec KdNLI = KdNL.mult(intensity);
 			diffuse = diffuse.add(KdNLI);
 
 			//Add specular
-			double VR = ray.direction().dot(Ops.reflect(L.hitToLight(hitPoint),hit.getNormalToSurface()));
+			Vec R = Ops.reflect(L.hitToLight(hitPoint).neg(), hit.getNormalToSurface());
+			double VR = ray.direction().neg().dot(R);
+			VR = (VR < 0 ? 0 : VR);
 			VR = Math.pow(VR, hitSurface.shininess());
 			specular = specular.add(hitSurface.Ks().mult(VR).mult(intensity));
 		}

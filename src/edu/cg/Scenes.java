@@ -29,7 +29,7 @@ public class Scenes {
 		Material sphereMat1 = new Material()
 				.initKa(new Vec(1))
 				.initKd1(new Vec(1, 0, 0))
-				.initKs(new Vec(0.7))
+				.initKs(new Vec(0.5))
 				.initReflectionIntensity(0.95)
 				.initShininess(10);
 		Surface sphereSurface1 = new Surface(sphereShape1, sphereMat1);
@@ -40,7 +40,7 @@ public class Scenes {
 		Material sphereMat2 = new Material()
 				.initKa(new Vec(1))
 				.initKd1(new Vec(0.6, 0, 0.8))
-				.initKs(new Vec(1))
+				.initKs(new Vec(0.5))
 				.initReflectionIntensity(0.005)
 				.initRefractionIndex(1.5)
 				.initRefractionIntensity(0.945)
@@ -63,7 +63,7 @@ public class Scenes {
 				.initAmbient(new Vec(0.1, 0.2, 0.3))
 				.initCamera(new Point(0, 0, 4))
 				.addLightSource(dirLight)
-				//.addLightSource(spotLight)
+				.addLightSource(spotLight)
 				.addSurface(plainSurface)
 				.addSurface(sphereSurface1)
 				.addSurface(sphereSurface2)
@@ -312,16 +312,15 @@ public class Scenes {
 
 	public static Scene scene10()
 	{
-		Shape sphere = new Sphere()
-				.initCenter(new Point(1,1,-6))
-				.initRadius(1.3);
+		Shape dome = new Dome(new Point(0.5,0.2,-5), 1.5, 0.5,new Vec(1,0.1,-0.5));
+
 		Material sphereMat = new Material()
-				.initKa(new Vec(0.05))
-				.initKd1(new Vec(0.5,0,0))
+				.initKa(new Vec(0.01))
+				.initKd1(new Vec(0.1,0,0))
 				.initKs(new Vec(1))
 				.initReflectionIntensity(0.95)
 				.initShininess(100);
-		Surface sphereSurface = new Surface(sphere, sphereMat);
+		Surface sphereSurface = new Surface(dome, sphereMat);
 
 		Shape sphere2 = new Sphere()
 				.initCenter(new Point(-1, 0.05, -5))

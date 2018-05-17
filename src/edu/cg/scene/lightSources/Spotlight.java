@@ -60,7 +60,7 @@ public class Spotlight extends PointLight {
 
 	public Vec hitToLight(Point hitPoint)
 	{
-		return direction.neg().normalize();
+		return new Vec(hitPoint, position).normalize();
 	}
 
 	public Point getPosition(){
