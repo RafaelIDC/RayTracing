@@ -67,7 +67,7 @@ public class Triangle extends Shape {
 
 		Vec d = intersectPoint.sub(ray.source());
 
-		if((d.dot(N1) > 0) && (d.dot(N2) > 0) && (d.dot(N3) > 0)){
+		if((d.dot(N1) >= 0) && (d.dot(N2) >= 0) && (d.dot(N3) >= 0)){
 			return new Hit(plainHit.t(), plainHit.getNormalToSurface());
 		}
 

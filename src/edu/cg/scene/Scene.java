@@ -230,12 +230,25 @@ public class Scene {
 		for (Light L : lightSources) {
 			boolean shadow = false;
 			Ray shadowRay = new Ray(hitPoint, L.getDirection(hitPoint).neg());
-			for (Surface s : surfaces)
-				if (s != hitSurface && s.intersect(shadowRay) != null)
-				{
-					shadow = true;
-					break;
+			double tToLight = (L.getPosition().x - hitPoint.x) / (shadowRay.direction().x + Double.MIN_VALUE);
+
+			for (Surface s : surfaces) {
+
+				Hit shadowHit = s.intersect(shadowRay);
+
+				//Check if the object the shadow hit is not *behind* the light
+				//if t(object) > t(light) then use the light
+
+				if (s != hitSurface && shadowHit != null) {
+					//compare t of shadow ray to light, and t of shadow ray to intersected object
+
+					if (shadowHit.t() < tToLight)
+					{
+						shadow = true;
+						break;
+					}
 				}
+			}
 
 			if (shadow)
 				continue;
@@ -270,26 +283,5 @@ public class Scene {
 		Ray reflection = new Ray(hitPoint, reflectionDir);
 		reflection = new Ray(reflection.add(Ops.epsilon), reflectionDir);
 		return res.add(calcColor(reflection, recursionLevel).mult(hitSurface.reflectionIntensity()));
-
-		//Check intersection of the ray (vector) with every surface in the scene list,
-		//Calculate the color in that point of intersection
-
-		//throw new UnimplementedMethodException("calcColor(Ray, int)");
 	}
 }
-
-
-
-
-
-
-
-
-//		for (Surface s : surfaces)
-//		{
-//			if (s.intersect(ray) != null)
-//			{
-/* TODO: Find closest shape */
-//				color = new Color(255,255,255);
-//			}
-//		}

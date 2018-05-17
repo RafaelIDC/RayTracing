@@ -55,4 +55,8 @@ public class Spotlight extends PointLight {
 	{
 		return direction;
 	}
+
+	public Point getPosition(){
+		return position;
+	}
 }

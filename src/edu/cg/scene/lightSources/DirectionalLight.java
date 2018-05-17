@@ -31,4 +31,9 @@ public class DirectionalLight extends Light {
 	{
 		return direction;
 	}
+
+	public Point getPosition(){
+		//light in virtual infinity
+		return new Point(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
+	}
 }

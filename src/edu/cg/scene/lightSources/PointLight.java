@@ -53,4 +53,8 @@ public class PointLight extends Light {
 
 		return intensity.mult( (1 / calc));
 	}
+
+	public Point getPosition(){
+		return position;
+	}
 }

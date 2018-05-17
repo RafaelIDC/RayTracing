@@ -373,7 +373,7 @@ public class Scenes {
 				.addSurface(sphereSurface)
 				.addSurface(sphere2Surface)
 				.addSurface(plainSurface)
-				.addSurface(plainSurface2)
+		//		.addSurface(plainSurface2)
 				.initName("KissingSpheres")
 				.initAntiAliasingFactor(1)
 				.initMaxRecursionLevel(8)

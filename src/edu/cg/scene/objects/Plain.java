@@ -139,6 +139,9 @@ public class Plain extends Shape {
 		if (t_int < 0)
 			return null;
 
-		return new Hit(t_int, this.normal);
+		if (ray.direction().neg().dot(N) < 0)
+			N = N.neg();
+
+		return new Hit(t_int, N);
 	}
 }

@@ -20,6 +20,8 @@ public abstract class Light {
 	public abstract Vec getDirection(Point hitPoint);
 
 	public abstract Vec getIntensity(Point hitPoint);
+
+	public abstract Point getPosition();
 	
 	//TODO: add some methods
 }

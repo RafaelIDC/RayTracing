@@ -95,7 +95,7 @@ public class Vec {
 		return new Color(clip(x), clip(y), clip(z));
 	}
 	
-	private static float clip(double val) {
+	public static float clip(double val) {
 		return (float)Math.min(1, Math.max(0, val));
 	}
 	
